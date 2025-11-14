@@ -4,7 +4,7 @@ import AxiosMockApdapter from "axios-mock-adapter";
 import { AuthProvider } from "@/components/providers";
 import { axiosClient } from "@/libs/axios";
 
-describe("認証ステータスを返す", () => {
+describe("認証ステータスでコンポーネントを切り替えて表示する", () => {
   let axiosClientMock: AxiosMockApdapter;
 
   beforeEach(() => {
