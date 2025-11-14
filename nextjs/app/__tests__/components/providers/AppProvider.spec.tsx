@@ -19,7 +19,14 @@ describe("データの取得中はローディング画面を表示する", () =
   let axiosClientMock: AxiosMockAdapter;
 
   beforeEach(() => {
-    axiosClientMock = new AxiosMockAdapter(axiosClient, { delayResponse: 500 });
+    axiosClientMock = new AxiosMockAdapter(axiosClient);
+    axiosClientMock.onGet("/tests").reply(200, { message: "Hello, World!" });
+
+    render(
+      <AppProvider>
+        <ChildComponent />
+      </AppProvider>,
+    );
   });
 
   afterEach(() => {
@@ -28,14 +35,6 @@ describe("データの取得中はローディング画面を表示する", () =
 
   describe("子のコンポーネントでデータを取得している場合", () => {
     test("ローディングが表示されること", async () => {
-      axiosClientMock.onGet("/tests").reply(200, { message: "Hello, World!" });
-
-      render(
-        <AppProvider>
-          <ChildComponent />
-        </AppProvider>,
-      );
-
       const loading = await screen.findByLabelText("読み込み中");
 
       expect(loading).toBeInTheDocument();
@@ -44,14 +43,6 @@ describe("データの取得中はローディング画面を表示する", () =
 
   describe("子のコンポーネントでデータを取得完了している場合", () => {
     test("データが表示されること", async () => {
-      axiosClientMock.onGet("/tests").reply(200, { message: "Hello, World!" });
-
-      render(
-        <AppProvider>
-          <ChildComponent />
-        </AppProvider>,
-      );
-
       const message = await screen.findByTestId("message");
 
       expect(message).toHaveTextContent("Hello, World!");
@@ -63,7 +54,7 @@ describe("データ取得中のエラーはエラー画面を表示する", () =
   let axiosClientMock: AxiosMockAdapter;
 
   beforeEach(() => {
-    axiosClientMock = new AxiosMockAdapter(axiosClient, { delayResponse: 500 });
+    axiosClientMock = new AxiosMockAdapter(axiosClient);
   });
 
   afterEach(() => {
