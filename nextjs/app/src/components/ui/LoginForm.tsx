@@ -1,18 +1,26 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Alert, Button, Stack, TextField } from "@mui/material";
 import { type ChangeEvent, useState } from "react";
 import { PasswordField } from "@/components/ui";
 
-type FormData = {
+export type LoginFormStatus =
+  | { isError: false }
+  | { isError: true; message: string };
+
+export type LoginFormData = {
   email: string;
   password: string;
 };
 
-type LoginFormProps = {
-  onClick: (formData: FormData) => void;
+export type LoginFormProps = {
+  formStatus?: LoginFormStatus;
+  onClick: (formData: LoginFormData) => void;
 };
 
-export const LoginForm = ({ onClick }: LoginFormProps) => {
-  const [formData, setFormData] = useState<FormData>({
+export const LoginForm = ({
+  formStatus = { isError: false },
+  onClick,
+}: Readonly<LoginFormProps>) => {
+  const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
   });
@@ -27,6 +35,11 @@ export const LoginForm = ({ onClick }: LoginFormProps) => {
 
   return (
     <Stack>
+      {formStatus.isError && (
+        <Alert data-testid="form-status-message" severity="error">
+          {formStatus.message}
+        </Alert>
+      )}
       <TextField
         label="メールアドレス"
         value={formData.email}
