@@ -15,6 +15,13 @@ const ChildComponent = () => {
   return <Typography>{data.message}</Typography>;
 };
 
+const renderComponent = () =>
+  render(
+    <AppProvider>
+      <ChildComponent />
+    </AppProvider>,
+  );
+
 describe("データの取得中はローディング画面を表示する", () => {
   let axiosClientMock: AxiosMockAdapter;
 
@@ -29,11 +36,7 @@ describe("データの取得中はローディング画面を表示する", () =
 
   describe("子のコンポーネントでデータを取得している場合", () => {
     test("ローディングが表示されること", async () => {
-      render(
-        <AppProvider>
-          <ChildComponent />
-        </AppProvider>,
-      );
+      renderComponent();
 
       const loading = await screen.findByLabelText("読み込み中");
 
@@ -43,11 +46,7 @@ describe("データの取得中はローディング画面を表示する", () =
 
   describe("子のコンポーネントでデータを取得完了している場合", () => {
     test("データが表示されること", async () => {
-      render(
-        <AppProvider>
-          <ChildComponent />
-        </AppProvider>,
-      );
+      renderComponent();
 
       const message = await screen.findByText("Hello, World!");
 
@@ -71,11 +70,7 @@ describe("データ取得中のエラーはエラー画面を表示する", () =
     test("エラー画面が表示されること", async () => {
       axiosClientMock.onGet("/tests").reply(500);
 
-      render(
-        <AppProvider>
-          <ChildComponent />
-        </AppProvider>,
-      );
+      renderComponent();
 
       const message = await screen.findByText(
         "予期しないエラーが発生しました。",

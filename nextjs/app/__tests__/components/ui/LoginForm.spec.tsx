@@ -3,7 +3,8 @@ import { LoginForm, type LoginFormData } from "@/components/ui";
 
 describe("ログインボタンをクリックすると入力された値でクリックイベントを実行する", () => {
   let expected: LoginFormData;
-  beforeEach(() => {
+
+  const renderComponent = () =>
     render(
       <LoginForm
         onClick={(formData) => {
@@ -11,9 +12,10 @@ describe("ログインボタンをクリックすると入力された値でク�
         }}
       />,
     );
-  });
 
   test("入力されたメールアドレスでクリックイベントが実行されること", async () => {
+    renderComponent();
+
     const emailField = await screen.findByLabelText("メールアドレス");
     fireEvent.change(emailField, { target: { value: "hoge@example.com" } });
 
@@ -27,6 +29,8 @@ describe("ログインボタンをクリックすると入力された値でク�
   });
 
   test("入力されたパスワードでクリックイベントが実行されること", async () => {
+    renderComponent();
+
     const passwordField = await screen.findByLabelText("パスワード");
     fireEvent.change(passwordField, { target: { value: "password" } });
 
@@ -43,11 +47,9 @@ describe("ログインボタンをクリックすると入力された値でク�
 describe("フォームのステータスを受け取り、エラーメッセージを表示する", () => {
   describe("フォームステータスが正常の場合", () => {
     test("エラーメッセージが表示されないこと", () => {
-      const { queryByTestId } = render(
-        <LoginForm formStatus={{ isError: false }} onClick={(_) => {}} />,
-      );
+      render(<LoginForm formStatus={{ isError: false }} onClick={(_) => {}} />);
 
-      const formStatusMessage = queryByTestId("form-status-message");
+      const formStatusMessage = screen.queryByTestId("form-status-message");
       expect(formStatusMessage).toBeNull();
     });
   });
@@ -75,9 +77,9 @@ describe("フォームのステータスを受け取り、エラーメッセー�
 
   describe("それ以外の場合", () => {
     test("エラーメッセージが表示されないこと", () => {
-      const { queryByTestId } = render(<LoginForm onClick={(_) => {}} />);
+      render(<LoginForm onClick={(_) => {}} />);
 
-      const formStatusMessage = queryByTestId("form-status-message");
+      const formStatusMessage = screen.queryByTestId("form-status-message");
       expect(formStatusMessage).toBeNull();
     });
   });
