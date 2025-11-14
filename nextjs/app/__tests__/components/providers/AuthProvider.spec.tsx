@@ -26,16 +26,14 @@ describe("認証ステータスでコンポーネントを切り替えて表示�
       render(
         <AuthProvider>
           {(isAuthed) => (
-            <Typography data-testid="auth-status">
+            <Typography>
               {isAuthed ? "認証しています" : "認証していません"}
             </Typography>
           )}
         </AuthProvider>,
       );
 
-      expect(await screen.findByTestId("auth-status")).toHaveTextContent(
-        "認証しています",
-      );
+      expect(await screen.findByText("認証しています")).toBeInTheDocument();
     });
   });
 
@@ -48,16 +46,14 @@ describe("認証ステータスでコンポーネントを切り替えて表示�
       render(
         <AuthProvider>
           {(isAuthed) => (
-            <Typography data-testid="auth-status">
+            <Typography>
               {isAuthed ? "認証しています" : "認証していません"}
             </Typography>
           )}
         </AuthProvider>,
       );
 
-      expect(await screen.findByTestId("auth-status")).toHaveTextContent(
-        "認証していません",
-      );
+      expect(await screen.findByText("認証していません")).toBeInTheDocument();
     });
   });
 });
