@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { PasswordField } from "@/components/ui/PasswordField";
 
-describe("目のアイコンでパスワードの表示・非表示を切り替えられる", () => {
+describe("目のアイコンでパスワードの表示・非表示を切り替える", () => {
   describe("パスワードを非表示にしている場合", () => {
     test("目のアイコンをクリックするとパスワードが表示されること", async () => {
       render(<PasswordField value="password" label="パスワード" />);
