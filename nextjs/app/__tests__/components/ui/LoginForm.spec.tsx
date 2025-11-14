@@ -13,11 +13,11 @@ describe("ログインボタンをクリックすると入力された値でク�
     );
   });
 
-  test("入力されたメールアドレスでクリックイベントが実行されること", () => {
-    const emailField = screen.getByLabelText("メールアドレス");
+  test("入力されたメールアドレスでクリックイベントが実行されること", async () => {
+    const emailField = await screen.findByLabelText("メールアドレス");
     fireEvent.change(emailField, { target: { value: "hoge@example.com" } });
 
-    const loginButton = screen.getByText("ログイン");
+    const loginButton = await screen.findByText("ログイン");
     fireEvent.click(loginButton);
 
     expect(expected).toStrictEqual({
@@ -26,11 +26,11 @@ describe("ログインボタンをクリックすると入力された値でク�
     });
   });
 
-  test("入力されたパスワードでクリックイベントが実行されること", () => {
-    const passwordField = screen.getByLabelText("パスワード");
+  test("入力されたパスワードでクリックイベントが実行されること", async () => {
+    const passwordField = await screen.findByLabelText("パスワード");
     fireEvent.change(passwordField, { target: { value: "password" } });
 
-    const loginButton = screen.getByText("ログイン");
+    const loginButton = await screen.findByText("ログイン");
     fireEvent.click(loginButton);
 
     expect(expected).toStrictEqual({
@@ -53,8 +53,8 @@ describe("フォームのステータスを受け取り、エラーメッセー�
   });
 
   describe("フォームステータスがエラーの場合", () => {
-    test("エラーメッセージが表示されること", () => {
-      const { getByTestId } = render(
+    test("エラーメッセージが表示されること", async () => {
+      render(
         <LoginForm
           formStatus={{
             isError: true,
@@ -64,7 +64,9 @@ describe("フォームのステータスを受け取り、エラーメッセー�
         />,
       );
 
-      const formStatusMessage = getByTestId("form-status-message");
+      const formStatusMessage = await screen.findByTestId(
+        "form-status-message",
+      );
       expect(formStatusMessage).toHaveTextContent(
         "メールアドレスまたはパスワードが間違っています",
       );
