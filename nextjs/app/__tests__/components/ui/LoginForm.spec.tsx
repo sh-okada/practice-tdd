@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { LoginForm, type LoginFormData } from "@/components/ui";
 
-describe("ログインボタンをクリックすると入力された値でクリックイベントが実行される", () => {
+describe("ログインボタンをクリックすると入力された値でクリックイベントを実行する", () => {
   let expected: LoginFormData;
   beforeEach(() => {
     render(
