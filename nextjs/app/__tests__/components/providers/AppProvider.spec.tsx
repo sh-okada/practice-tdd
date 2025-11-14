@@ -15,7 +15,7 @@ const ChildComponent = () => {
   return <Typography data-testid="message">{data.message}</Typography>;
 };
 
-describe("Suspenseでローディング画面を表示する", () => {
+describe("データの取得中はローディング画面を表示する", () => {
   let axiosClientMock: AxiosMockAdapter;
 
   beforeEach(() => {
@@ -55,6 +55,36 @@ describe("Suspenseでローディング画面を表示する", () => {
       const message = await screen.findByTestId("message");
 
       expect(message).toHaveTextContent("Hello, World!");
+    });
+  });
+});
+
+describe("データ取得中のエラーはエラー画面を表示する", () => {
+  let axiosClientMock: AxiosMockAdapter;
+
+  beforeEach(() => {
+    axiosClientMock = new AxiosMockAdapter(axiosClient, { delayResponse: 500 });
+  });
+
+  afterEach(() => {
+    axiosClientMock.restore();
+  });
+
+  describe("子のコンポーネントでデータを取得中にエラーが発生した場合", () => {
+    test("エラー画面が表示されること", async () => {
+      axiosClientMock.onGet("/tests").reply(500);
+
+      render(
+        <AppProvider>
+          <ChildComponent />
+        </AppProvider>,
+      );
+
+      const message = await screen.findByText(
+        "予期しないエラーが発生しました。",
+      );
+
+      expect(message).toBeInTheDocument();
     });
   });
 });
