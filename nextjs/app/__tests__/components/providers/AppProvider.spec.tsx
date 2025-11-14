@@ -66,7 +66,7 @@ describe("データ取得中のエラーはエラー画面を表示する", () =
     axiosClientMock.restore();
   });
 
-  describe.skip("子のコンポーネントでデータを取得中にエラーが発生した場合", () => {
+  describe("子のコンポーネントでデータを取得中にエラーが発生した場合", () => {
     test("エラー画面が表示されること", async () => {
       axiosClientMock.onGet("/tests").reply(500);
 

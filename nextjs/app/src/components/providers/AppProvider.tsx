@@ -12,15 +12,15 @@ export const AppProvider = ({ children }: Readonly<AppProviderProps>) => {
   return (
     <>
       <CssBaseline />
-      <ErrorBoundary
-        fallback={<Typography>予期しないエラーが発生しました。</Typography>}
-      >
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <ErrorBoundary
+          fallback={<Typography>予期しないエラーが発生しました。</Typography>}
+        >
           <Suspense fallback={<CircularProgress aria-label="読み込み中" />}>
             {children}
           </Suspense>
-        </QueryClientProvider>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </QueryClientProvider>
     </>
   );
 };
