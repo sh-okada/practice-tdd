@@ -1,4 +1,4 @@
-import { fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { LoginForm, type LoginFormData } from "@/components/ui";
 import { renderApp } from "@/libs/rtl";
 
@@ -18,10 +18,10 @@ describe("ログインボタンをクリックすると入力された値でク�
     const { findByLabelText, findByText } = renderComponent();
 
     const emailField = await findByLabelText("メールアドレス");
-    fireEvent.change(emailField, { target: { value: "hoge@example.com" } });
+    await userEvent.type(emailField, "hoge@example.com");
 
     const loginButton = await findByText("ログイン");
-    fireEvent.click(loginButton);
+    await userEvent.click(loginButton);
 
     expect(expected).toStrictEqual({
       email: "hoge@example.com",
@@ -33,10 +33,10 @@ describe("ログインボタンをクリックすると入力された値でク�
     const { findByLabelText, findByText } = renderComponent();
 
     const passwordField = await findByLabelText("パスワード");
-    fireEvent.change(passwordField, { target: { value: "password" } });
+    await userEvent.type(passwordField, "password");
 
     const loginButton = await findByText("ログイン");
-    fireEvent.click(loginButton);
+    await userEvent.click(loginButton);
 
     expect(expected).toStrictEqual({
       email: "",
