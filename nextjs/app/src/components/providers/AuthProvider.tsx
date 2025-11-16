@@ -1,5 +1,4 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import type React from "react";
 import { getMe } from "@/api/users";
 import { isUnauthorizedError } from "@/libs/axios";
 

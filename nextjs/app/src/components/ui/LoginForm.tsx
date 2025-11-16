@@ -1,5 +1,5 @@
 import { Alert, Button, Stack, TextField } from "@mui/material";
-import { type ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { PasswordField } from "@/components/ui";
 
 export type LoginFormStatus =
@@ -25,11 +25,11 @@ export const LoginForm = ({
     password: "",
   });
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, email: e.target.value });
   };
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, password: e.target.value });
   };
 
