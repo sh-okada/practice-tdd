@@ -1,10 +1,9 @@
 import { Typography } from "@mui/material";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { render } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
-import { AppProvider } from "@/components/providers";
 import { axiosClient } from "@/libs/axios";
 import { server } from "@/libs/msw";
+import { renderApp } from "@/libs/rtl";
 
 const ChildComponent = () => {
   const { data } = useSuspenseQuery({
@@ -17,12 +16,7 @@ const ChildComponent = () => {
   return <Typography>{data.message}</Typography>;
 };
 
-const renderComponent = () =>
-  render(
-    <AppProvider>
-      <ChildComponent />
-    </AppProvider>,
-  );
+const renderComponent = () => renderApp(<ChildComponent />);
 
 describe("データの取得中はローディング画面を表示する", () => {
   beforeEach(() => {
