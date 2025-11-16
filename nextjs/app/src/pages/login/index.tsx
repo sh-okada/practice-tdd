@@ -7,9 +7,7 @@ export default function LoginPage() {
 
   return (
     <AuthProvider>
-      {(isAuthed) =>
-        isAuthed ? router.replace(paths.home.getHref()) : <>aaa</>
-      }
+      {(isAuthed) => (isAuthed ? router.replace(paths.home.getHref()) : <></>)}
     </AuthProvider>
   );
 }

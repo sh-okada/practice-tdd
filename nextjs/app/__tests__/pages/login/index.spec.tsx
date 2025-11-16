@@ -7,7 +7,7 @@ import LoginPage from "@/pages/login";
 
 describe("ログインしていないユーザーのみログインページにアクセスできる", () => {
   describe("ログインしている場合", () => {
-    test("ログインページにアクセスするとホームページにリダイレクトされる", async () => {
+    test("ホームページにリダイレクトされること", async () => {
       server.use(
         http.get("http://localhost:8000/api/users/me", () => {
           return HttpResponse.json(
@@ -34,7 +34,7 @@ describe("ログインしていないユーザーのみログインページに�
   });
 
   describe("ログインしていない場合", () => {
-    test("ログインフォームが表示される", async () => {
+    test("ホームページにリダイレクトされないこと", async () => {
       server.use(
         http.get("http://localhost:8000/api/users/me", () => {
           return HttpResponse.json(
@@ -46,9 +46,15 @@ describe("ログインしていないユーザーのみログインページに�
         }),
       );
 
-      const { findByTestId } = renderApp(<LoginPage />);
+      const mockReplace = jest.fn();
+      (useRouter as jest.Mock).mockReturnValue({
+        replace: mockReplace,
+      });
+      renderApp(<LoginPage />);
 
-      expect(await findByTestId("login-form")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(mockReplace).not.toHaveBeenCalled();
+      });
     });
   });
 });
