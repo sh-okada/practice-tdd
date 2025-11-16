@@ -1,27 +1,26 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import type React from "react";
-import { useEffect, useState } from "react";
 import { getMe } from "@/api/users";
+import { isUnauthorizedError } from "@/libs/axios";
 
 export type AuthProviderProps = {
   children: (isAuthed: boolean) => React.ReactNode;
 };
 
 export const AuthProvider = ({ children }: Readonly<AuthProviderProps>) => {
-  const [isAuthed, setIsAuthed] = useState<boolean>();
+  const { data } = useSuspenseQuery({
+    queryKey: ["/users/me"],
+    queryFn: () =>
+      getMe()
+        .then(() => true)
+        .catch((error) => {
+          if (isUnauthorizedError(error)) {
+            return false;
+          }
 
-  useEffect(() => {
-    getMe()
-      .then(() => {
-        setIsAuthed(true);
-      })
-      .catch(() => {
-        setIsAuthed(false);
-      });
-  }, []);
+          return Promise.reject(error);
+        }),
+  });
 
-  if (typeof isAuthed === "undefined") {
-    return null;
-  }
-
-  return <>{children(isAuthed)}</>;
+  return <>{children(data)}</>;
 };
