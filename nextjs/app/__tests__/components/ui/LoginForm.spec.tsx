@@ -1,11 +1,12 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
 import { LoginForm, type LoginFormData } from "@/components/ui";
+import { renderApp } from "@/libs/rtl";
 
 describe("ログインボタンをクリックすると入力された値でクリックイベントを実行する", () => {
   let expected: LoginFormData;
 
   const renderComponent = () =>
-    render(
+    renderApp(
       <LoginForm
         onClick={(formData) => {
           expected = formData;
@@ -14,12 +15,12 @@ describe("ログインボタンをクリックすると入力された値でク�
     );
 
   test("入力されたメールアドレスでクリックイベントが実行されること", async () => {
-    renderComponent();
+    const { findByLabelText, findByText } = renderComponent();
 
-    const emailField = await screen.findByLabelText("メールアドレス");
+    const emailField = await findByLabelText("メールアドレス");
     fireEvent.change(emailField, { target: { value: "hoge@example.com" } });
 
-    const loginButton = await screen.findByText("ログイン");
+    const loginButton = await findByText("ログイン");
     fireEvent.click(loginButton);
 
     expect(expected).toStrictEqual({
@@ -29,12 +30,12 @@ describe("ログインボタンをクリックすると入力された値でク�
   });
 
   test("入力されたパスワードでクリックイベントが実行されること", async () => {
-    renderComponent();
+    const { findByLabelText, findByText } = renderComponent();
 
-    const passwordField = await screen.findByLabelText("パスワード");
+    const passwordField = await findByLabelText("パスワード");
     fireEvent.change(passwordField, { target: { value: "password" } });
 
-    const loginButton = await screen.findByText("ログイン");
+    const loginButton = await findByText("ログイン");
     fireEvent.click(loginButton);
 
     expect(expected).toStrictEqual({
@@ -47,16 +48,18 @@ describe("ログインボタンをクリックすると入力された値でク�
 describe("フォームのステータスを受け取り、エラーメッセージを表示する", () => {
   describe("フォームステータスが正常の場合", () => {
     test("エラーメッセージが表示されないこと", () => {
-      render(<LoginForm formStatus={{ isError: false }} onClick={(_) => {}} />);
+      const { queryByTestId } = renderApp(
+        <LoginForm formStatus={{ isError: false }} onClick={(_) => {}} />,
+      );
 
-      const formStatusMessage = screen.queryByTestId("form-status-message");
+      const formStatusMessage = queryByTestId("form-status-message");
       expect(formStatusMessage).toBeNull();
     });
   });
 
   describe("フォームステータスがエラーの場合", () => {
     test("エラーメッセージが表示されること", async () => {
-      render(
+      const { findByTestId } = renderApp(
         <LoginForm
           formStatus={{
             isError: true,
@@ -66,9 +69,7 @@ describe("フォームのステータスを受け取り、エラーメッセー�
         />,
       );
 
-      const formStatusMessage = await screen.findByTestId(
-        "form-status-message",
-      );
+      const formStatusMessage = await findByTestId("form-status-message");
       expect(formStatusMessage).toHaveTextContent(
         "メールアドレスまたはパスワードが間違っています",
       );
@@ -77,9 +78,9 @@ describe("フォームのステータスを受け取り、エラーメッセー�
 
   describe("それ以外の場合", () => {
     test("エラーメッセージが表示されないこと", () => {
-      render(<LoginForm onClick={(_) => {}} />);
+      const { queryByTestId } = renderApp(<LoginForm onClick={(_) => {}} />);
 
-      const formStatusMessage = screen.queryByTestId("form-status-message");
+      const formStatusMessage = queryByTestId("form-status-message");
       expect(formStatusMessage).toBeNull();
     });
   });
