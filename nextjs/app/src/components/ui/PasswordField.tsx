@@ -5,7 +5,10 @@ import { useState } from "react";
 
 export type PasswordFieldProps = TextFieldProps;
 
-export const PasswordField = ({ slotProps, ...rest }: PasswordFieldProps) => {
+export const PasswordField = ({
+  slotProps,
+  ...rest
+}: Readonly<PasswordFieldProps>) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
