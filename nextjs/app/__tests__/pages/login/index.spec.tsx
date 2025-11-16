@@ -9,7 +9,7 @@ describe("ログインしていないユーザーのみログインページに�
   describe("ログインしている場合", () => {
     test("ログインページにアクセスするとホームページにリダイレクトされる", async () => {
       server.use(
-        http.get("http://localhost:8000/api/users/me", async () => {
+        http.get("http://localhost:8000/api/users/me", () => {
           return HttpResponse.json(
             {
               id: "8415e241-9a24-4502-847a-abe348e84535",
@@ -30,6 +30,25 @@ describe("ログインしていないユーザーのみログインページに�
       await waitFor(() => {
         expect(mockReplace).toHaveBeenCalledWith("/");
       });
+    });
+  });
+
+  describe("ログインしていない場合", () => {
+    test("ログインフォームが表示される", async () => {
+      server.use(
+        http.get("http://localhost:8000/api/users/me", () => {
+          return HttpResponse.json(
+            {
+              detail: "認証してません。",
+            },
+            { status: 401 },
+          );
+        }),
+      );
+
+      const { findByTestId } = renderApp(<LoginPage />);
+
+      expect(await findByTestId("login-form")).toBeInTheDocument();
     });
   });
 });

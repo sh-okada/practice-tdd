@@ -40,7 +40,7 @@ describe("認証ステータスでコンポーネントを切り替えて表示�
   describe("認証していない場合", () => {
     test("認証ステータスは未認証であること", async () => {
       server.use(
-        http.get("http://localhost:8000/api/users/me", async () => {
+        http.get("http://localhost:8000/api/users/me", () => {
           return HttpResponse.json(
             {
               detail: "認証していません。",

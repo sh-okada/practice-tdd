@@ -21,7 +21,7 @@ const renderComponent = () => renderApp(<ChildComponent />);
 describe("データの取得中はローディング画面を表示する", () => {
   beforeEach(() => {
     server.use(
-      http.get("http://localhost:8000/api/tests", async () => {
+      http.get("http://localhost:8000/api/tests", () => {
         return HttpResponse.json({ message: "Hello, World!" }, { status: 200 });
       }),
     );
@@ -52,7 +52,7 @@ describe("データ取得中のエラーはエラー画面を表示する", () =
   describe("子のコンポーネントでデータを取得中にエラーが発生した場合", () => {
     test("エラー画面が表示されること", async () => {
       server.use(
-        http.get("http://localhost:8000/api/tests", async () => {
+        http.get("http://localhost:8000/api/tests", () => {
           return HttpResponse.json(
             { detail: "サーバーでエラーが発生しました。" },
             { status: 500 },
