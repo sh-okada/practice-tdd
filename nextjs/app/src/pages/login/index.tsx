@@ -10,7 +10,7 @@ import { isBadRequestError } from "@/libs/axios";
 export default function LoginPage() {
   const router = useRouter();
   const { showBoundary } = useErrorBoundary();
-  const { mutate, data } = useMutation({
+  const { mutate, data: formStatus } = useMutation({
     mutationFn: (formData: LoginFormData) =>
       login(formData)
         .then(() => {
@@ -36,8 +36,8 @@ export default function LoginPage() {
           router.replace(paths.home.getHref())
         ) : (
           <LoginForm
-            formStatus={data}
-            onClick={(formData) => mutate(formData)}
+            formStatus={formStatus}
+            onSubmit={(formData) => mutate(formData)}
           />
         )
       }

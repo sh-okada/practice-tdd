@@ -1,5 +1,5 @@
 import { Alert, Button, Stack, TextField } from "@mui/material";
-import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { PasswordField } from "@/components/ui";
 
 export type LoginFormStatus =
@@ -13,44 +13,44 @@ export type LoginFormData = {
 
 export type LoginFormProps = {
   formStatus?: LoginFormStatus;
-  onClick: (formData: LoginFormData) => void;
+  onSubmit: (formData: LoginFormData) => void;
 };
 
 export const LoginForm = ({
   formStatus = { isError: false },
-  onClick,
+  onSubmit,
 }: Readonly<LoginFormProps>) => {
-  const [formData, setFormData] = useState<LoginFormData>({
-    email: "",
-    password: "",
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<LoginFormData>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, email: e.target.value });
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, password: e.target.value });
-  };
-
   return (
-    <Stack>
+    <Stack component="form" onSubmit={handleSubmit(onSubmit)}>
       {formStatus.isError && (
         <Alert data-testid="form-status-message" severity="error">
           {formStatus.message}
         </Alert>
       )}
-      <TextField
-        label="メールアドレス"
-        value={formData.email}
-        onChange={handleEmailChange}
+      <Controller
+        name="email"
+        control={control}
+        render={({ field }) => <TextField {...field} label="メールアドレス" />}
       />
-      <PasswordField
-        label="パスワード"
-        value={formData.password}
-        onChange={handlePasswordChange}
+      <Controller
+        name="password"
+        control={control}
+        render={({ field }) => <PasswordField {...field} label="パスワード" />}
       />
-      <Button onClick={() => onClick(formData)}>ログイン</Button>
+      <Button type="submit" loading={isSubmitting}>
+        ログイン
+      </Button>
     </Stack>
   );
 };
