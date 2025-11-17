@@ -6,5 +6,8 @@ export const axiosClient = axios.create({
   adapter: "fetch",
 });
 
+export const isBadRequestError = (error: unknown): error is AxiosError =>
+  axios.isAxiosError(error) && error.response?.status === 400;
+
 export const isUnauthorizedError = (error: unknown): error is AxiosError =>
   axios.isAxiosError(error) && error.response?.status === 401;

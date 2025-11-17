@@ -70,7 +70,9 @@ describe("ユーザー情報取得APIでログイン状態をチェックし、�
       );
 
       const { findByText } = renderComponent();
-      expect(await findByText("予期しないエラーが発生しました。"));
+
+      const message = await findByText("予期しないエラーが発生しました。");
+      expect(message).toBeInTheDocument();
     });
   });
 });

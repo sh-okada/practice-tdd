@@ -3,7 +3,7 @@
   "dockerComposeFile": "docker-compose.yaml",
   "service": "app",
   "workspaceFolder": "/workspace/nextjs/app",
-  "forwardPorts": [3000, 6006],
+  // "forwardPorts": [3000, 6006],
   "customizations": {
     "vscode": {
       "extensions": ["biomejs.biome"],

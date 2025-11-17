@@ -6,9 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile
     tty: true
-    ports:
-      - 3000:3000
-      - 6006:6006
+    # ports:
+      # - 3000:3000
+      # - 6006:6006
     volumes:
       - ../:/workspace
       - /workspace/nextjs/app/node_modules
