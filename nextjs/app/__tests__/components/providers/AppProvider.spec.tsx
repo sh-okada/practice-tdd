@@ -57,7 +57,7 @@ describe("API実行ステータスによる表示制御", () => {
   });
 
   describe("APIでデータ取得に失敗した場合", () => {
-    test("エラー画面が表示されること", async () => {
+    test("エラーが表示されること", async () => {
       server.use(
         http.get("http://localhost:8000/api/tests", () => {
           return HttpResponse.json(
@@ -77,7 +77,7 @@ describe("API実行ステータスによる表示制御", () => {
 
 describe("エラーが発生した場合、エラー画面を表示する", () => {
   describe("コンポーネントでエラーが発生した場合", () => {
-    test("エラー画面が表示されること", async () => {
+    test("エラーが表示されること", async () => {
       const ErrorComponent = () => {
         throw new Error();
       };
