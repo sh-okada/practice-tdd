@@ -2,7 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { renderApp } from "@/libs/rtl";
 
-describe("ボタンをクリックによるパスワードの表示・非表示を切り替え", () => {
+describe("ボタンでパスワードの表示・非表示を切り替える", () => {
   const renderComponent = () =>
     renderApp(<PasswordField value="password" label="パスワード" />);
 
