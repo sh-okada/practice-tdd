@@ -10,7 +10,6 @@ const ChildComponent = () => {
     queryKey: ["/tests"],
     queryFn: () =>
       axiosClient.get<{ message: string }>("/tests").then((res) => res.data),
-    retry: false,
   });
 
   return <Typography data-testid="message-text">{data.message}</Typography>;
