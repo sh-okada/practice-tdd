@@ -13,12 +13,12 @@ const ChildComponent = () => {
     retry: false,
   });
 
-  return <Typography>{data.message}</Typography>;
+  return <Typography data-testid="message-text">{data.message}</Typography>;
 };
 
 const renderComponent = () => renderApp(<ChildComponent />);
 
-describe("データの取得中はローディング画面を表示する", () => {
+describe("APIでデータを取得中の場合、ローディングを表示する", () => {
   beforeEach(() => {
     server.use(
       http.get("http://localhost:8000/api/tests", () => {
@@ -27,29 +27,27 @@ describe("データの取得中はローディング画面を表示する", () =
     );
   });
 
-  describe("子のコンポーネントでデータを取得している場合", () => {
+  describe("APIでデータを取得中の場合", () => {
     test("ローディングが表示されること", async () => {
       const { findByLabelText } = renderComponent();
 
       const loading = await findByLabelText("読み込み中");
-
       expect(loading).toBeInTheDocument();
     });
   });
 
-  describe("子のコンポーネントでデータを取得完了している場合", () => {
+  describe("APIでデータを取得完了した場合", () => {
     test("データが表示されること", async () => {
       const { findByText } = renderComponent();
 
       const message = await findByText("Hello, World!");
-
       expect(message).toBeInTheDocument();
     });
   });
 });
 
-describe("データ取得中のエラーはエラー画面を表示する", () => {
-  describe("子のコンポーネントでデータを取得中にエラーが発生した場合", () => {
+describe("エラーが発生した場合、エラー画面を表示する", () => {
+  describe("APIでデータを取得中にエラーが発生した場合", () => {
     test("エラー画面が表示されること", async () => {
       server.use(
         http.get("http://localhost:8000/api/tests", () => {
@@ -63,7 +61,19 @@ describe("データ取得中のエラーはエラー画面を表示する", () =
       const { findByText } = renderComponent();
 
       const message = await findByText("予期しないエラーが発生しました。");
+      expect(message).toBeInTheDocument();
+    });
+  });
 
+  describe("コンポーネントでエラーが発生した場合", () => {
+    test("エラー画面が表示されること", async () => {
+      const ErrorComponent = () => {
+        throw new Error();
+      };
+
+      const { findByText } = renderApp(<ErrorComponent />);
+
+      const message = await findByText("予期しないエラーが発生しました。");
       expect(message).toBeInTheDocument();
     });
   });
