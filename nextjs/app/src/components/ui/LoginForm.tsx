@@ -1,15 +1,11 @@
 import { Alert, Button, Stack, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { PasswordField } from "@/components/ui";
+import { type LoginFormData, loginFormValidationRules } from "@/libs/rhf";
 
 export type LoginFormStatus =
   | { isError: false }
   | { isError: true; message: string };
-
-export type LoginFormData = {
-  email: string;
-  password: string;
-};
 
 export type LoginFormProps = {
   formStatus?: LoginFormStatus;
@@ -25,10 +21,7 @@ export const LoginForm = ({
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<LoginFormData>({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    mode: "onBlur",
   });
 
   return (
@@ -41,12 +34,28 @@ export const LoginForm = ({
       <Controller
         name="email"
         control={control}
-        render={({ field }) => <TextField {...field} label="メールアドレス" />}
+        rules={loginFormValidationRules.email}
+        render={({ field, fieldState }) => (
+          <TextField
+            {...field}
+            label="メールアドレス"
+            error={fieldState.invalid}
+            helperText={fieldState.error?.message}
+          />
+        )}
       />
       <Controller
         name="password"
         control={control}
-        render={({ field }) => <PasswordField {...field} label="パスワード" />}
+        rules={loginFormValidationRules.password}
+        render={({ field, fieldState }) => (
+          <PasswordField
+            {...field}
+            label="パスワード"
+            error={fieldState.invalid}
+            helperText={fieldState.error?.message}
+          />
+        )}
       />
       <Button type="submit" loading={isSubmitting}>
         ログイン
