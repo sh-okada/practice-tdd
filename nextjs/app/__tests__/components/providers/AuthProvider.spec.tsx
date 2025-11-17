@@ -19,7 +19,7 @@ describe("ユーザー情報取得APIでログイン状態をチェックし、�
   describe("ユーザー情報が取得できた場合", () => {
     test("ログイン状態であること", async () => {
       server.use(
-        http.get("http://localhost:8000/api/users/me", async () => {
+        http.get("http://localhost:8000/api/users/me", () => {
           return HttpResponse.json(
             {
               id: "8415e241-9a24-4502-847a-abe348e84535",
