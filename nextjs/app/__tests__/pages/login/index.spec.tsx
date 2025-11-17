@@ -5,7 +5,7 @@ import { server } from "@/libs/msw";
 import { renderApp } from "@/libs/rtl";
 import LoginPage from "@/pages/login";
 
-describe("ログインしていないユーザーのみログインページにアクセスできる", () => {
+describe("ログイン状態によるアクセス制御", () => {
   describe("ログインしている場合", () => {
     test("ホームページにリダイレクトされること", async () => {
       server.use(

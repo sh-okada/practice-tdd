@@ -2,12 +2,12 @@ import userEvent from "@testing-library/user-event";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { renderApp } from "@/libs/rtl";
 
-describe("目のアイコンでパスワードの表示・非表示を切り替える", () => {
+describe("ボタンをクリックによるパスワードの表示・非表示を切り替え", () => {
   const renderComponent = () =>
     renderApp(<PasswordField value="password" label="パスワード" />);
 
-  describe("パスワードを非表示にしている場合", () => {
-    test("目のアイコンをクリックするとパスワードが表示されること", async () => {
+  describe("ボタンをクリックした場合", () => {
+    test("パスワードが表示されること", async () => {
       const { findByLabelText } = renderComponent();
 
       const showPasswordIconButton = await findByLabelText(
@@ -20,8 +20,8 @@ describe("目のアイコンでパスワードの表示・非表示を切り替�
     });
   });
 
-  describe("パスワードを表示している場合", () => {
-    test("目のアイコンをクリックするとパスワードが非表示になること", async () => {
+  describe("ボタンを2回クリックした場合", () => {
+    test("パスワードが非表示になること", async () => {
       const { findByLabelText } = renderComponent();
 
       const showPasswordIconButton = await findByLabelText(
