@@ -3,9 +3,10 @@ import { useRouter } from "next/router";
 import { useErrorBoundary } from "react-error-boundary";
 import { login } from "@/api/auth";
 import { AuthProvider } from "@/components/providers";
-import { LoginForm, type LoginFormData } from "@/components/ui";
+import { LoginForm } from "@/components/ui";
 import { paths } from "@/configs";
 import { isBadRequestError } from "@/libs/axios";
+import type { LoginFormData } from "@/libs/rhf";
 
 export default function LoginPage() {
   const router = useRouter();
