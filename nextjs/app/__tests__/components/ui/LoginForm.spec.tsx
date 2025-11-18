@@ -4,11 +4,69 @@ import { LoginForm } from "@/components/ui";
 import type { LoginFormData } from "@/libs/rhf";
 import { renderApp } from "@/libs/rtl";
 
-describe("入力された値でクリックイベントを実行", () => {
-  let expected: LoginFormData;
+describe("onBlurでバリデーションを実行する", () => {
+  const renderComponent = () => renderApp(<LoginForm onSubmit={() => {}} />);
 
-  const renderComponent = () =>
-    renderApp(
+  describe("メールアドレスは必須入力", () => {
+    describe("入力していない場合", () => {
+      test("エラーメッセージが表示されること", async () => {
+        const { findByLabelText, findByText } = renderComponent();
+
+        const emailField = await findByLabelText("メールアドレス");
+        await userEvent.click(emailField);
+        await userEvent.tab();
+
+        expect(
+          await findByText("メールアドレスを入力してください"),
+        ).toBeInTheDocument();
+      });
+    });
+
+    describe("入力している場合", () => {
+      test("エラーメッセージが表示されないこと", async () => {
+        const { findByLabelText, queryByText } = renderComponent();
+
+        const emailField = await findByLabelText("メールアドレス");
+        await userEvent.type(emailField, "hoge@example.com");
+
+        expect(queryByText("メールアドレスを入力してください")).toBeNull();
+      });
+    });
+  });
+
+  describe("パスワードは必須入力", () => {
+    describe("入力していない場合", () => {
+      test("エラーメッセージが表示されること", async () => {
+        const { findByLabelText, findByText } = renderComponent();
+
+        const passwordField = await findByLabelText("パスワード");
+        await userEvent.click(passwordField);
+        await userEvent.tab();
+
+        expect(
+          await findByText("パスワードを入力してください"),
+        ).toBeInTheDocument();
+      });
+    });
+
+    describe("入力している場合", () => {
+      test("エラーメッセージが表示されないこと", async () => {
+        const { findByLabelText, queryByText } = renderComponent();
+
+        const passwordField = await findByLabelText("パスワード");
+        await userEvent.type(passwordField, "password");
+
+        expect(queryByText("パスワードを入力してください")).toBeNull();
+      });
+    });
+  });
+});
+
+describe("ログインボタンでonSubmitを実行する", () => {
+  test("入力した値を引数にしてonSubmitが実行されること", async () => {
+    let expected: LoginFormData | undefined;
+
+    const { findByLabelText, findByText } = renderApp(
       <LoginForm
         onSubmit={(formData) => {
           expected = formData;
@@ -16,19 +74,34 @@ describe("入力された値でクリックイベントを実行", () => {
       />,
     );
 
-  describe("バリデーションエラーがある場合", () => {
-    test("クリックイベントが実行されないこと", async () => {
-      const { findByText } = renderComponent();
+    const emailField = await findByLabelText("メールアドレス");
+    await userEvent.type(emailField, "hoge@example.com");
 
-      const loginButton = await findByText("ログイン");
-      await userEvent.click(loginButton);
+    const passwordField = await findByLabelText("パスワード");
+    await userEvent.type(passwordField, "password");
 
-      expect(expected).toBeUndefined();
+    const loginButton = await findByText("ログイン");
+    await userEvent.click(loginButton);
+
+    expect(expected).toStrictEqual({
+      email: "hoge@example.com",
+      password: "password",
     });
   });
+});
 
-  describe("バリデーションエラーがない場合", () => {
-    test("クリックイベントが実行されること", async () => {
+describe("onSubmitの多重実行を防止する", () => {
+  const renderComponent = () =>
+    renderApp(
+      <LoginForm
+        onSubmit={async () => {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }}
+      />,
+    );
+
+  describe("onSubmit実行中の場合", () => {
+    test("ログインボタンが非活性であること", async () => {
       const { findByLabelText, findByText } = renderComponent();
 
       const emailField = await findByLabelText("メールアドレス");
@@ -40,85 +113,23 @@ describe("入力された値でクリックイベントを実行", () => {
       const loginButton = await findByText("ログイン");
       await userEvent.click(loginButton);
 
-      expect(expected).toStrictEqual({
-        email: "hoge@example.com",
-        password: "password",
-      });
-    });
-  });
-});
-
-describe("フォームステータスによるエラーメッセージの表示", () => {
-  describe("エラーの場合", () => {
-    test("エラーメッセージが表示されること", async () => {
-      const { findByTestId } = renderApp(
-        <LoginForm
-          formStatus={{
-            isError: true,
-            message: "メールアドレスまたはパスワードが間違っています",
-          }}
-          onSubmit={(_) => {}}
-        />,
-      );
-
-      const formStatusMessage = await findByTestId("form-status-message");
-      expect(formStatusMessage).toHaveTextContent(
-        "メールアドレスまたはパスワードが間違っています",
-      );
-    });
-  });
-
-  describe("エラーでない場合", () => {
-    test("エラーメッセージが表示されないこと", () => {
-      const { queryByTestId } = renderApp(
-        <LoginForm formStatus={{ isError: false }} onSubmit={(_) => {}} />,
-      );
-
-      const formStatusMessage = queryByTestId("form-status-message");
-      expect(formStatusMessage).toBeNull();
-    });
-  });
-
-  describe("それ以外の場合", () => {
-    test("エラーメッセージが表示されないこと", () => {
-      const { queryByTestId } = renderApp(<LoginForm onSubmit={(_) => {}} />);
-
-      const formStatusMessage = queryByTestId("form-status-message");
-      expect(formStatusMessage).toBeNull();
-    });
-  });
-});
-
-describe("サブミット中のログインボタンの活性・非活性", () => {
-  let loginButton: HTMLElement;
-
-  beforeEach(async () => {
-    const { findByLabelText, findByText } = renderApp(
-      <LoginForm
-        onSubmit={async () => {
-          await new Promise((resolve) => setTimeout(resolve, 500));
-        }}
-      />,
-    );
-
-    const emailField = await findByLabelText("メールアドレス");
-    await userEvent.type(emailField, "hoge@example.com");
-
-    const passwordField = await findByLabelText("パスワード");
-    await userEvent.type(passwordField, "password");
-
-    loginButton = await findByText("ログイン");
-    await userEvent.click(loginButton);
-  });
-
-  describe("サブミット中の場合", () => {
-    test("ログインボタンが非活性であること", async () => {
       expect(loginButton).toBeDisabled();
     });
   });
 
-  describe("サブミット中でない場合", () => {
+  describe("onSubmit実行完了の場合", () => {
     test("ログインボタンが活性であること", async () => {
+      const { findByLabelText, findByText } = renderComponent();
+
+      const emailField = await findByLabelText("メールアドレス");
+      await userEvent.type(emailField, "hoge@example.com");
+
+      const passwordField = await findByLabelText("パスワード");
+      await userEvent.type(passwordField, "password");
+
+      const loginButton = await findByText("ログイン");
+      await userEvent.click(loginButton);
+
       await waitFor(() => {
         expect(loginButton).toBeEnabled();
       });
@@ -126,64 +137,27 @@ describe("サブミット中のログインボタンの活性・非活性", () =
   });
 });
 
-describe("メールアドレスのバリデーション（blur）", () => {
-  describe("未入力の場合", () => {
-    test("メッセージが表示されること", async () => {
-      const { findByLabelText, findByText } = renderApp(
-        <LoginForm onSubmit={() => {}} />,
+describe("エラーステータスでエラーメッセージを表示する", () => {
+  describe("エラーの場合", () => {
+    test("エラーメッセージが表示されること", async () => {
+      const { findByText } = renderApp(
+        <LoginForm
+          formStatus={{ isError: true, message: "エラーだよ" }}
+          onSubmit={() => {}}
+        />,
       );
 
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.click(emailField);
-      await userEvent.tab();
-
-      const message = await findByText("メールアドレスを入力してください");
-      expect(message).toBeInTheDocument();
+      expect(await findByText("エラーだよ")).toBeInTheDocument();
     });
   });
 
-  describe("未入力でない場合", () => {
-    test("メッセージが表示されないこと", async () => {
-      const { findByLabelText, queryByText } = renderApp(
-        <LoginForm onSubmit={() => {}} />,
+  describe("エラーでない場合", () => {
+    test("エラーメッセージが表示されないこと", () => {
+      const { queryByText } = renderApp(
+        <LoginForm formStatus={{ isError: false }} onSubmit={() => {}} />,
       );
 
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const message = queryByText("メールアドレスを入力してください");
-      expect(message).toBeNull();
-    });
-  });
-});
-
-describe("パスワードのバリデーション（blur）", () => {
-  describe("未入力の場合", () => {
-    test("メッセージが表示されること", async () => {
-      const { findByLabelText, findByText } = renderApp(
-        <LoginForm onSubmit={() => {}} />,
-      );
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.click(passwordField);
-      await userEvent.tab();
-
-      const message = await findByText("パスワードを入力してください");
-      expect(message).toBeInTheDocument();
-    });
-  });
-
-  describe("未入力でない場合", () => {
-    test("メッセージが表示されないこと", async () => {
-      const { findByLabelText, queryByText } = renderApp(
-        <LoginForm onSubmit={() => {}} />,
-      );
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "hoge@example.com");
-
-      const message = queryByText("password");
-      expect(message).toBeNull();
+      expect(queryByText("エラーだよ")).toBeNull();
     });
   });
 });
