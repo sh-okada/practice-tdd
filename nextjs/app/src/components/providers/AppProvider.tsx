@@ -1,8 +1,9 @@
-import { CircularProgress, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "@/components/ui";
+import { Loading } from "@/components/ui/Loading";
 import { queryConfig } from "@/libs/react-query";
 
 type AppProviderProps = {
@@ -17,9 +18,7 @@ export const AppProvider = ({ children }: Readonly<AppProviderProps>) => {
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <ErrorBoundary fallback={<ErrorFallback />}>
-          <Suspense fallback={<CircularProgress aria-label="読み込み中" />}>
-            {children}
-          </Suspense>
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </ErrorBoundary>
       </QueryClientProvider>
     </>
