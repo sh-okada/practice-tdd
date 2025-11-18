@@ -21,15 +21,17 @@ export const LoginForm = ({
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<LoginFormData>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
     mode: "onBlur",
   });
 
   return (
     <Stack component="form" onSubmit={handleSubmit(onSubmit)}>
       {formStatus.isError && (
-        <Alert data-testid="form-status-message" severity="error">
-          {formStatus.message}
-        </Alert>
+        <Alert severity="error">{formStatus.message}</Alert>
       )}
       <Controller
         name="email"

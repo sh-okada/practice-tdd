@@ -6,9 +6,9 @@ import { server } from "@/libs/msw";
 import { renderApp } from "@/libs/rtl";
 import LoginPage from "@/pages/login";
 
-describe("ログイン状態によるアクセス制御", () => {
+describe("ログインしていない場合のみアクセスできる", () => {
   describe("ログインしている場合", () => {
-    test("ホームページにリダイレクトされること", async () => {
+    test("/ にリダイレクトされること", async () => {
       server.use(
         http.get("http://localhost:8000/api/users/me", () => {
           return HttpResponse.json(
@@ -35,7 +35,7 @@ describe("ログイン状態によるアクセス制御", () => {
   });
 
   describe("ログインしていない場合", () => {
-    test("ホームページにリダイレクトされないこと", async () => {
+    test("/ にリダイレクトされないこと", async () => {
       server.use(
         http.get("http://localhost:8000/api/users/me", () => {
           return HttpResponse.json(
@@ -61,7 +61,7 @@ describe("ログイン状態によるアクセス制御", () => {
   });
 });
 
-describe("ログインAPIによるログイン", () => {
+describe("ログインAPIでログインする", () => {
   beforeEach(() => {
     server.use(
       http.get("http://localhost:8000/api/users/me", () => {
@@ -75,8 +75,8 @@ describe("ログインAPIによるログイン", () => {
     );
   });
 
-  describe("APIのステータスコードが200の場合", () => {
-    test("「/」にリダイレクトされること", async () => {
+  describe("ステータスコードが200の場合", () => {
+    test("/ にリダイレクトされること", async () => {
       server.use(
         http.post("http://localhost:8000/api/auth/login", () => {
           return HttpResponse.json(
@@ -110,7 +110,7 @@ describe("ログインAPIによるログイン", () => {
     });
   });
 
-  describe("APIのステータス400の場合", () => {
+  describe("ステータスコードが400の場合", () => {
     test("エラーメッセージが表示されること", async () => {
       server.use(
         http.post("http://localhost:8000/api/auth/login", () => {
@@ -123,9 +123,7 @@ describe("ログインAPIによるログイン", () => {
         }),
       );
 
-      const { findByLabelText, findByText, findByTestId } = renderApp(
-        <LoginPage />,
-      );
+      const { findByLabelText, findByText } = renderApp(<LoginPage />);
 
       const emailField = await findByLabelText("メールアドレス");
       await userEvent.type(emailField, "hoge@example.com");
@@ -136,14 +134,13 @@ describe("ログインAPIによるログイン", () => {
       const loginButton = await findByText("ログイン");
       await userEvent.click(loginButton);
 
-      const message = await findByTestId("form-status-message");
-      expect(message).toHaveTextContent(
-        "メールアドレスまたはパスワードが間違っています",
-      );
+      expect(
+        await findByText("メールアドレスまたはパスワードが間違っています"),
+      ).toBeInTheDocument();
     });
   });
 
-  describe("それ以外のステータスコードの場合", () => {
+  describe("それ以外の場合", () => {
     test("エラーが表示されること", async () => {
       server.use(
         http.post("http://localhost:8000/api/auth/login", () => {
