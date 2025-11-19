@@ -29,7 +29,7 @@ export const LoginForm = ({
   });
 
   return (
-    <Stack component="form" onSubmit={handleSubmit(onSubmit)}>
+    <Stack spacing={2} component="form" onSubmit={handleSubmit(onSubmit)}>
       {formStatus.isError && (
         <Alert severity="error">{formStatus.message}</Alert>
       )}
@@ -59,7 +59,12 @@ export const LoginForm = ({
           />
         )}
       />
-      <Button type="submit" loading={isSubmitting}>
+      <Button
+        type="submit"
+        variant="contained"
+        size="large"
+        loading={isSubmitting}
+      >
         ログイン
       </Button>
     </Stack>
