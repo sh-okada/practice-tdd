@@ -64,7 +64,6 @@ export const LoginForm = ({
         variant="contained"
         size="large"
         loading={isSubmitting}
-        loadingPosition="start"
       >
         ログイン
       </Button>
