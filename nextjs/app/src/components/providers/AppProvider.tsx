@@ -2,8 +2,7 @@ import { CssBaseline, NoSsr } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { ErrorFallback } from "@/components/ui";
-import { Loading } from "@/components/ui/Loading";
+import { ErrorFallback, LoadingFallback } from "@/components/ui";
 import { queryConfig } from "@/libs/react-query";
 
 type AppProviderProps = {
@@ -18,7 +17,7 @@ export const AppProvider = ({ children }: Readonly<AppProviderProps>) => {
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <ErrorBoundary fallback={<ErrorFallback />}>
-          <Suspense fallback={<Loading />}>{children}</Suspense>
+          <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
         </ErrorBoundary>
       </QueryClientProvider>
     </NoSsr>
