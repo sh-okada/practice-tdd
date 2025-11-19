@@ -1,4 +1,4 @@
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, NoSsr } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -14,13 +14,13 @@ export const AppProvider = ({ children }: Readonly<AppProviderProps>) => {
   const [queryClient] = React.useState(() => new QueryClient(queryConfig));
 
   return (
-    <>
+    <NoSsr>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <ErrorBoundary fallback={<ErrorFallback />}>
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </ErrorBoundary>
       </QueryClientProvider>
-    </>
+    </NoSsr>
   );
 };
