@@ -1,5 +1,3 @@
-// Replace your-framework with nextjs or nextjs-vite
-
 import { Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react";
 import { delay, HttpResponse, http } from "msw";

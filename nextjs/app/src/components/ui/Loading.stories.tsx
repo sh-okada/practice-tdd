@@ -1,5 +1,3 @@
-// Replace your-framework with nextjs or nextjs-vite
-
 import type { Meta, StoryObj } from "@storybook/react";
 import { Loading } from "@/components/ui";
 
