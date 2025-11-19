@@ -8,6 +8,8 @@ TDDで開発する以上、テスト容易性を高めるには複雑性なSSR�
 ## なぜApp routerじゃないのか？
 Suspenseを使うことが前提とされているasync Componentのユニットテストが確立されていない。
 
+現状、ネストされていないasync Componentのテストはrtlでも可能だが、ネストされているとテストできない。[公式](https://nextjs.org/docs/app/guides/testing/jest)でもasync Componentsのテストはe2eで行うことを推奨している。
+
 ## なぜtailwindcssじゃないのか？
 tailwindcssは素晴らしいライブラリだが、一からスタイリング、アクセシビリティの考慮をする必要があるため現実的ではない。
 
