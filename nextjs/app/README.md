@@ -10,3 +10,5 @@ Suspenseを使うことが前提とされているasync Componentのユニット
 
 ## なぜtailwindcssじゃないのか？
 tailwindcssは素晴らしいライブラリだが、一からスタイリング、アクセシビリティの考慮をする必要があるため現実的ではない。
+
+どうしてもtailwindcssを採用したい場合はheadlessuiなど、アクセシビリティ実装済みのデザインがないCSSライブラリと併用する。
