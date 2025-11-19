@@ -41,7 +41,7 @@ export const Default: Story = {
       handlers: {
         login: [
           http.post("http://localhost:8000/api/auth/login", async () => {
-            await delay(5000);
+            await delay(1000);
 
             return HttpResponse.json(
               {

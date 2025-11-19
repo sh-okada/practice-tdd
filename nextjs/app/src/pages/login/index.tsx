@@ -11,7 +11,7 @@ import type { LoginFormData } from "@/libs/rhf";
 export default function LoginPage() {
   const router = useRouter();
   const { showBoundary } = useErrorBoundary();
-  const { mutate, data: formStatus } = useMutation({
+  const { mutateAsync, data: formStatus } = useMutation({
     mutationFn: (formData: LoginFormData) =>
       login(formData)
         .then(() => {
@@ -38,7 +38,7 @@ export default function LoginPage() {
         ) : (
           <LoginForm
             formStatus={formStatus}
-            onSubmit={(formData) => mutate(formData)}
+            onSubmit={async (formData) => await mutateAsync(formData)}
           />
         )
       }
