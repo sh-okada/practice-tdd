@@ -23,5 +23,12 @@
     "formatter": {
       "trailingCommas": "none"
     }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "useSortedAttributes": "on"
+      }
+    }
   }
 }
