@@ -10,8 +10,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onSubmit: (data) => {
-      console.log(data);
+    onSubmit: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     },
   },
 };
