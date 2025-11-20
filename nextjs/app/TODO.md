@@ -72,3 +72,4 @@ https://github.com/sh-okada/practice-tdd/issues/2
 - 文字数制限する？
 - メールアドレスはRFCに準拠させる？
 - パスワードの使用できる文字なに？
+- フォームのrhfのロジック部分が似ているのでなんとかしたい
