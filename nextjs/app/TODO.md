@@ -1,7 +1,7 @@
 # TODO
 
 ## ログイン
-[https://github.com/sh-okada/practice-tdd/issues/1](https://github.com/sh-okada/practice-tdd/issues/1)
+https://github.com/sh-okada/practice-tdd/issues/1
 
 ```
 要件
@@ -44,3 +44,18 @@
 - [x] 400のときエラーメッセージ
 - [x] 200のときは / に遷移
 - [x] それ以外はエラー画面
+
+## ユーザー登録
+https://github.com/sh-okada/practice-tdd/issues/2
+
+```
+要件
+フォームに名前、メールアドレス、パスワードを入力してユーザーを登録する。ただし、すでに使われている名前は使用できない。
+```
+
+- [ ] 名前は必須入力
+- [ ] メールアドレスは必須入力
+- [ ] パスワードは必須入力
+- [ ] propsからonSubmitを受け取る
+- [ ] 登録ボタンでonSumitを入力した値で実行
+- [ ] onSubmit実行中は登録ボタンは非活性
