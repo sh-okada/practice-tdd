@@ -16,7 +16,6 @@ export const PasswordField = ({
 
   return (
     <TextField
-      type={showPassword ? "text" : "password"}
       slotProps={{
         input: {
           endAdornment: (
@@ -34,6 +33,7 @@ export const PasswordField = ({
         },
         ...slotProps,
       }}
+      type={showPassword ? "text" : "password"}
       {...rest}
     />
   );

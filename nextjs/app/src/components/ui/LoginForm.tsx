@@ -29,41 +29,41 @@ export const LoginForm = ({
   });
 
   return (
-    <Stack spacing={2} component="form" onSubmit={handleSubmit(onSubmit)}>
+    <Stack component="form" onSubmit={handleSubmit(onSubmit)} spacing={2}>
       {formStatus.isError && (
         <Alert severity="error">{formStatus.message}</Alert>
       )}
       <Controller
-        name="email"
         control={control}
-        rules={loginFormValidationRules.email}
+        name="email"
         render={({ field, fieldState }) => (
           <TextField
             {...field}
-            label="メールアドレス"
             error={fieldState.invalid}
             helperText={fieldState.error?.message}
+            label="メールアドレス"
           />
         )}
+        rules={loginFormValidationRules.email}
       />
       <Controller
-        name="password"
         control={control}
-        rules={loginFormValidationRules.password}
+        name="password"
         render={({ field, fieldState }) => (
           <PasswordField
             {...field}
-            label="パスワード"
             error={fieldState.invalid}
             helperText={fieldState.error?.message}
+            label="パスワード"
           />
         )}
+        rules={loginFormValidationRules.password}
       />
       <Button
+        loading={isSubmitting}
+        size="large"
         type="submit"
         variant="contained"
-        size="large"
-        loading={isSubmitting}
       >
         ログイン
       </Button>

@@ -4,7 +4,7 @@ import { renderApp } from "@/libs/rtl";
 
 describe("ボタンでパスワードの表示・非表示を切り替える", () => {
   const renderComponent = () =>
-    renderApp(<PasswordField value="password" label="パスワード" />);
+    renderApp(<PasswordField label="パスワード" value="password" />);
 
   describe("ボタンをクリックした場合", () => {
     test("パスワードが表示されること", async () => {
