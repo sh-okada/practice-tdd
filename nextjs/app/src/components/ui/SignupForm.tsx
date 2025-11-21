@@ -1,18 +1,33 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Alert, Button, Stack, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { type SignupFormData, signupFormValidationRules } from "@/libs/rhf";
 
+export type SignupFormStatus =
+  | { isError: false }
+  | { isError: true; message: string };
+
 export type SignupFormProps = {
+  formStatus?: SignupFormStatus;
   onSubmit: (formData: SignupFormData) => void;
 };
 
-export const SignupForm = ({ onSubmit }: SignupFormProps) => {
-  const { control, handleSubmit } = useForm<SignupFormData>({
+export const SignupForm = ({
+  formStatus = { isError: false },
+  onSubmit,
+}: SignupFormProps) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<SignupFormData>({
     mode: "onBlur",
   });
 
   return (
     <Stack component="form" onSubmit={handleSubmit(onSubmit)} spacing={2}>
+      {formStatus.isError && (
+        <Alert severity="error">{formStatus.message}</Alert>
+      )}
       <Controller
         control={control}
         name="name"
@@ -52,7 +67,12 @@ export const SignupForm = ({ onSubmit }: SignupFormProps) => {
         )}
         rules={signupFormValidationRules.password}
       />
-      <Button type="submit" variant="contained">
+      <Button
+        loading={isSubmitting}
+        size="large"
+        type="submit"
+        variant="contained"
+      >
         登録
       </Button>
     </Stack>

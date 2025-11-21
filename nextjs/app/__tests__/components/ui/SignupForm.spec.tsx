@@ -1,3 +1,4 @@
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { SignupForm } from "@/components/ui/SignupForm";
 import type { SignupFormData } from "@/libs/rhf";
@@ -228,6 +229,85 @@ describe("登録ボタンでonSubmitを実行する", () => {
       name: "大谷 翔平",
       email: "hoge@example.com",
       password: "Password1",
+    });
+  });
+});
+
+describe("onSubmitの多重実行を防止する", () => {
+  const renderComponent = () =>
+    renderApp(
+      <SignupForm
+        onSubmit={async () => {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }}
+      />,
+    );
+
+  describe("onSubmit実行中の場合", () => {
+    test("登録ボタンが非活性であること", async () => {
+      const { findByLabelText, findByText } = renderComponent();
+
+      const nameField = await findByLabelText("名前");
+      await userEvent.type(nameField, "大谷 翔平");
+
+      const emailField = await findByLabelText("メールアドレス");
+      await userEvent.type(emailField, "hoge@example.com");
+
+      const passwordField = await findByLabelText("パスワード");
+      await userEvent.type(passwordField, "Password1");
+
+      const signupButton = await findByText("登録");
+      expect(signupButton).toBeEnabled();
+
+      await userEvent.click(signupButton);
+      expect(signupButton).toBeDisabled();
+    });
+  });
+
+  describe("onSubmit実行完了の場合", () => {
+    test("登録ボタンが活性であること", async () => {
+      const { findByLabelText, findByText } = renderComponent();
+
+      const nameField = await findByLabelText("名前");
+      await userEvent.type(nameField, "大谷 翔平");
+
+      const emailField = await findByLabelText("メールアドレス");
+      await userEvent.type(emailField, "hoge@example.com");
+
+      const passwordField = await findByLabelText("パスワード");
+      await userEvent.type(passwordField, "Password1");
+
+      const signupButton = await findByText("登録");
+      await userEvent.click(signupButton);
+
+      await waitFor(() => {
+        expect(signupButton).toBeEnabled();
+      });
+    });
+  });
+});
+
+describe("エラーステータスでエラーメッセージを表示する", () => {
+  describe("エラーの場合", () => {
+    test("エラーメッセージが表示されること", async () => {
+      const { findByText } = renderApp(
+        <SignupForm
+          formStatus={{ isError: true, message: "エラーだよ" }}
+          onSubmit={() => {}}
+        />,
+      );
+
+      expect(await findByText("エラーだよ")).toBeInTheDocument();
+    });
+  });
+
+  describe("エラーでない場合", () => {
+    test("エラーメッセージが表示されないこと", () => {
+      const { queryByText } = renderApp(
+        <SignupForm formStatus={{ isError: false }} onSubmit={() => {}} />,
+      );
+
+      expect(queryByText("エラーだよ")).toBeNull();
     });
   });
 });

@@ -59,8 +59,9 @@ https://github.com/sh-okada/practice-tdd/issues/2
 - [x] パスワードは必須入力
 - [x] propsからonSubmitを受け取る
 - [x] 登録ボタンでonSubmitを入力した値で実行
-- [ ] onSubmit実行中は登録ボタンは非活性
-- [ ] onSubmitを実行後は登録ボタンは活性
+- [x] onSubmit実行中は登録ボタンは非活性
+- [x] onSubmitを実行後は登録ボタンは活性
+- [x] フォームにエラーメッセージを表示したい
 - [ ] ログインしているユーザーはホームにリダイレクト
 - [ ] ログインしていない場合のみ /signup
 - [ ] APIで登録したい
