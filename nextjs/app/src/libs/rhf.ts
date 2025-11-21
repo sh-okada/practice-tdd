@@ -6,8 +6,8 @@ export type LoginFormData = {
 };
 
 type LoginFormValidationRules = {
-  email: RegisterOptions<SignupFormData, "email">;
-  password: RegisterOptions<SignupFormData, "password">;
+  email: RegisterOptions<LoginFormData, "email">;
+  password: RegisterOptions<LoginFormData, "password">;
 };
 
 export const loginFormValidationRules: LoginFormValidationRules = {
