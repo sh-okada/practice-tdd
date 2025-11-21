@@ -102,4 +102,100 @@ describe("onBlurでバリデーションを実行する", () => {
       });
     });
   });
+
+  describe("パスワードは8文字以上", () => {
+    describe("8文字の場合", () => {
+      test("エラーメッセージが表示されないこと", async () => {
+        const { findByLabelText, queryByText } = renderComponent();
+
+        const passwordField = await findByLabelText("パスワード");
+        await userEvent.type(passwordField, "Passw0rd");
+        await userEvent.tab();
+
+        expect(
+          queryByText("パスワードは8文字以上で入力してください"),
+        ).toBeNull();
+      });
+    });
+
+    describe("7文字の場合", () => {
+      test("エラーメッセージが表示されること", async () => {
+        const { findByLabelText, findByText } = renderComponent();
+
+        const passwordField = await findByLabelText("パスワード");
+        await userEvent.type(passwordField, "Passw0r");
+        await userEvent.tab();
+
+        expect(
+          await findByText("パスワードは8文字以上で入力してください"),
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("パスワードは少なくとも大文字・小文字・数字を1つ以上使用", () => {
+    describe("大文字・小文字・数字が使用されている場合", () => {
+      test("エラーメッセージが表示されないこと", async () => {
+        const { findByLabelText, queryByText } = renderComponent();
+
+        const passwordField = await findByLabelText("パスワード");
+        await userEvent.type(passwordField, "Password1");
+        await userEvent.tab();
+
+        expect(
+          queryByText(
+            "パスワードには少なくとも大文字・小文字・数字を1つ以上使用してください",
+          ),
+        ).toBeNull();
+      });
+    });
+
+    describe("大文字が使用されていない場合", () => {
+      test("エラーメッセージが表示されること", async () => {
+        const { findByLabelText, findByText } = renderComponent();
+
+        const passwordField = await findByLabelText("パスワード");
+        await userEvent.type(passwordField, "password1");
+        await userEvent.tab();
+
+        expect(
+          await findByText(
+            "パスワードには少なくとも大文字・小文字・数字を1つ以上使用してください",
+          ),
+        ).toBeInTheDocument();
+      });
+    });
+
+    describe("小文字が使用されていない場合", () => {
+      test("エラーメッセージが表示されること", async () => {
+        const { findByLabelText, findByText } = renderComponent();
+
+        const passwordField = await findByLabelText("パスワード");
+        await userEvent.type(passwordField, "PASSWORD1");
+        await userEvent.tab();
+
+        expect(
+          await findByText(
+            "パスワードには少なくとも大文字・小文字・数字を1つ以上使用してください",
+          ),
+        ).toBeInTheDocument();
+      });
+    });
+
+    describe("数字が使用されていない場合", () => {
+      test("エラーメッセージが表示されること", async () => {
+        const { findByLabelText, findByText } = renderComponent();
+
+        const passwordField = await findByLabelText("パスワード");
+        await userEvent.type(passwordField, "Password");
+        await userEvent.tab();
+
+        expect(
+          await findByText(
+            "パスワードには少なくとも大文字・小文字・数字を1つ以上使用してください",
+          ),
+        ).toBeInTheDocument();
+      });
+    });
+  });
 });
