@@ -1,8 +1,16 @@
+import type { RegisterOptions } from "react-hook-form";
+
 export type LoginFormData = {
   email: string;
   password: string;
 };
-export const loginFormValidationRules = {
+
+type LoginFormValidationRules = {
+  email: RegisterOptions<SignupFormData, "email">;
+  password: RegisterOptions<SignupFormData, "password">;
+};
+
+export const loginFormValidationRules: LoginFormValidationRules = {
   email: {
     required: "メールアドレスを入力してください",
   },
@@ -10,3 +18,31 @@ export const loginFormValidationRules = {
     required: "パスワードを入力してください",
   },
 } as const;
+
+export type SignupFormData = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+type SignupFormValidationRules = {
+  name: RegisterOptions<SignupFormData, "name">;
+  email: RegisterOptions<SignupFormData, "email">;
+  password: RegisterOptions<SignupFormData, "password">;
+};
+
+export const signupFormValidationRules: SignupFormValidationRules = {
+  name: {
+    required: "名前を入力してください",
+    maxLength: {
+      value: 50,
+      message: "名前は50文字以内で入力してください",
+    },
+  },
+  email: {
+    required: "メールアドレスを入力してください",
+  },
+  password: {
+    required: "パスワードを入力してください",
+  },
+};
