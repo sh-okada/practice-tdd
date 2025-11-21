@@ -1,9 +1,10 @@
 import userEvent from "@testing-library/user-event";
 import { SignupForm } from "@/components/ui/SignupForm";
+import type { SignupFormData } from "@/libs/rhf";
 import { generateString, renderApp } from "@/libs/rtl";
 
 describe("onBlurでバリデーションを実行する", () => {
-  const renderComponent = () => renderApp(<SignupForm />);
+  const renderComponent = () => renderApp(<SignupForm onSubmit={() => {}} />);
 
   describe("名前は必須入力", () => {
     describe("入力していない場合", () => {
@@ -196,6 +197,37 @@ describe("onBlurでバリデーションを実行する", () => {
           ),
         ).toBeInTheDocument();
       });
+    });
+  });
+});
+
+describe("登録ボタンでonSubmitを実行する", () => {
+  test("入力した値を引数にしてonSubmitが実行されること", async () => {
+    let expected: SignupFormData | undefined;
+    const { findByLabelText, findByText } = renderApp(
+      <SignupForm
+        onSubmit={(data) => {
+          expected = data;
+        }}
+      />,
+    );
+
+    const nameField = await findByLabelText("名前");
+    await userEvent.type(nameField, "大谷 翔平");
+
+    const emailField = await findByLabelText("メールアドレス");
+    await userEvent.type(emailField, "hoge@example.com");
+
+    const passwordField = await findByLabelText("パスワード");
+    await userEvent.type(passwordField, "Password1");
+
+    const signupButton = await findByText("登録");
+    await userEvent.click(signupButton);
+
+    expect(expected).toStrictEqual({
+      name: "大谷 翔平",
+      email: "hoge@example.com",
+      password: "Password1",
     });
   });
 });
