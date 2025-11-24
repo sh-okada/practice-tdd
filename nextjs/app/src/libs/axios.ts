@@ -11,3 +11,6 @@ export const isBadRequestError = (error: unknown): error is AxiosError =>
 
 export const isUnauthorizedError = (error: unknown): error is AxiosError =>
   axios.isAxiosError(error) && error.response?.status === 401;
+
+export const isConflictError = (error: unknown): error is AxiosError =>
+  axios.isAxiosError(error) && error.response?.status === 409;
