@@ -61,7 +61,7 @@ describe("ログインしていない場合のみアクセスできる", () => {
   });
 });
 
-describe("サインアップAPIでログインする", () => {
+describe("サインアップAPIでユーザー登録する", () => {
   beforeEach(() => {
     server.use(
       http.get("http://localhost:8000/api/users/me", () => {
