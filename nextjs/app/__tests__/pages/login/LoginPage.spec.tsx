@@ -62,6 +62,22 @@ describe("ログインしていない場合のみアクセスできる", () => {
 });
 
 describe("ログインAPIでログインする", () => {
+  const renderComponent = async () => {
+    const rendered = renderApp(<LoginPage />);
+    const { findByLabelText, findByText } = rendered;
+
+    const emailField = await findByLabelText("メールアドレス");
+    await userEvent.type(emailField, "hoge@example.com");
+
+    const passwordField = await findByLabelText("パスワード");
+    await userEvent.type(passwordField, "password");
+
+    const loginButton = await findByText("ログイン");
+    await userEvent.click(loginButton);
+
+    return rendered;
+  };
+
   beforeEach(() => {
     server.use(
       http.get("http://localhost:8000/api/users/me", () => {
@@ -93,16 +109,7 @@ describe("ログインAPIでログインする", () => {
         replace: mockReplace,
       });
 
-      const { findByLabelText, findByText } = renderApp(<LoginPage />);
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "password");
-
-      const loginButton = await findByText("ログイン");
-      await userEvent.click(loginButton);
+      await renderComponent();
 
       await waitFor(() => {
         expect(mockReplace).toHaveBeenCalledWith("/");
@@ -123,16 +130,7 @@ describe("ログインAPIでログインする", () => {
         }),
       );
 
-      const { findByLabelText, findByText } = renderApp(<LoginPage />);
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "password");
-
-      const loginButton = await findByText("ログイン");
-      await userEvent.click(loginButton);
+      const { findByText } = await renderComponent();
 
       expect(
         await findByText("メールアドレスまたはパスワードが間違っています"),
@@ -153,19 +151,11 @@ describe("ログインAPIでログインする", () => {
         }),
       );
 
-      const { findByLabelText, findByText } = renderApp(<LoginPage />);
+      const { findByText } = await renderComponent();
 
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "password");
-
-      const loginButton = await findByText("ログイン");
-      await userEvent.click(loginButton);
-
-      const message = await findByText("予期しないエラーが発生しました。");
-      expect(message).toBeInTheDocument();
+      expect(
+        await findByText("予期しないエラーが発生しました。"),
+      ).toBeInTheDocument();
     });
   });
 });

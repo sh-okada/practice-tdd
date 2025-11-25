@@ -28,6 +28,7 @@ describe("onBlurでバリデーションを実行する", () => {
 
         const emailField = await findByLabelText("メールアドレス");
         await userEvent.type(emailField, "hoge@example.com");
+        await userEvent.tab();
 
         expect(queryByText("メールアドレスを入力してください")).toBeNull();
       });
@@ -55,6 +56,7 @@ describe("onBlurでバリデーションを実行する", () => {
 
         const passwordField = await findByLabelText("パスワード");
         await userEvent.type(passwordField, "password");
+        await userEvent.tab();
 
         expect(queryByText("パスワードを入力してください")).toBeNull();
       });
@@ -91,8 +93,8 @@ describe("ログインボタンでonSubmitを実行する", () => {
 });
 
 describe("onSubmitの多重実行を防止する", () => {
-  const renderComponent = () =>
-    renderApp(
+  const renderComponent = async () => {
+    const { findByLabelText, findByText } = renderApp(
       <LoginForm
         onSubmit={async () => {
           await new Promise((resolve) => setTimeout(resolve, 500));
@@ -100,18 +102,21 @@ describe("onSubmitの多重実行を防止する", () => {
       />,
     );
 
+    const emailField = await findByLabelText("メールアドレス");
+    await userEvent.type(emailField, "hoge@example.com");
+
+    const passwordField = await findByLabelText("パスワード");
+    await userEvent.type(passwordField, "password");
+
+    const loginButton = await findByText("ログイン");
+    await userEvent.click(loginButton);
+
+    return loginButton;
+  };
+
   describe("onSubmit実行中の場合", () => {
     test("ログインボタンが非活性であること", async () => {
-      const { findByLabelText, findByText } = renderComponent();
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "password");
-
-      const loginButton = await findByText("ログイン");
-      await userEvent.click(loginButton);
+      const loginButton = await renderComponent();
 
       expect(loginButton).toBeDisabled();
     });
@@ -119,16 +124,7 @@ describe("onSubmitの多重実行を防止する", () => {
 
   describe("onSubmit実行完了の場合", () => {
     test("ログインボタンが活性であること", async () => {
-      const { findByLabelText, findByText } = renderComponent();
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "password");
-
-      const loginButton = await findByText("ログイン");
-      await userEvent.click(loginButton);
+      const loginButton = await renderComponent();
 
       await waitFor(() => {
         expect(loginButton).toBeEnabled();

@@ -234,8 +234,8 @@ describe("登録ボタンでonSubmitを実行する", () => {
 });
 
 describe("onSubmitの多重実行を防止する", () => {
-  const renderComponent = () =>
-    renderApp(
+  const renderComponent = async () => {
+    const { findByLabelText, findByText } = renderApp(
       <SignupForm
         onSubmit={async () => {
           await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -243,42 +243,34 @@ describe("onSubmitの多重実行を防止する", () => {
       />,
     );
 
+    const nameField = await findByLabelText("名前");
+    await userEvent.type(nameField, "大谷 翔平");
+
+    const emailField = await findByLabelText("メールアドレス");
+    await userEvent.type(emailField, "hoge@example.com");
+
+    const passwordField = await findByLabelText("パスワード");
+    await userEvent.type(passwordField, "Password1");
+
+    const signupButton = await findByText("登録");
+    expect(signupButton).toBeEnabled();
+
+    await userEvent.click(signupButton);
+
+    return signupButton;
+  };
+
   describe("onSubmit実行中の場合", () => {
     test("登録ボタンが非活性であること", async () => {
-      const { findByLabelText, findByText } = renderComponent();
+      const signupButton = await renderComponent();
 
-      const nameField = await findByLabelText("名前");
-      await userEvent.type(nameField, "大谷 翔平");
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "Password1");
-
-      const signupButton = await findByText("登録");
-      expect(signupButton).toBeEnabled();
-
-      await userEvent.click(signupButton);
       expect(signupButton).toBeDisabled();
     });
   });
 
   describe("onSubmit実行完了の場合", () => {
     test("登録ボタンが活性であること", async () => {
-      const { findByLabelText, findByText } = renderComponent();
-
-      const nameField = await findByLabelText("名前");
-      await userEvent.type(nameField, "大谷 翔平");
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "Password1");
-
-      const signupButton = await findByText("登録");
-      await userEvent.click(signupButton);
+      const signupButton = await renderComponent();
 
       await waitFor(() => {
         expect(signupButton).toBeEnabled();
