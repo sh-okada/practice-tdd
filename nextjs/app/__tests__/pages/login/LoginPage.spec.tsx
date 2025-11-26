@@ -22,14 +22,11 @@ describe("ログインしていない場合のみアクセスできる", () => {
         }),
       );
 
-      const mockReplace = jest.fn();
-      (useRouter as jest.Mock).mockReturnValue({
-        replace: mockReplace,
-      });
       renderApp(<LoginPage />);
 
       await waitFor(() => {
-        expect(mockReplace).toHaveBeenCalledWith("/");
+        const { replace } = useRouter();
+        expect(replace).toHaveBeenCalledWith("/");
       });
     });
   });
@@ -47,15 +44,11 @@ describe("ログインしていない場合のみアクセスできる", () => {
         }),
       );
 
-      const mockReplace = jest.fn();
-      (useRouter as jest.Mock).mockReturnValue({
-        replace: mockReplace,
-      });
-
       renderApp(<LoginPage />);
 
       await waitFor(() => {
-        expect(mockReplace).not.toHaveBeenCalled();
+        const { replace } = useRouter();
+        expect(replace).not.toHaveBeenCalled();
       });
     });
   });
@@ -104,15 +97,11 @@ describe("ログインAPIでログインする", () => {
         }),
       );
 
-      const mockReplace = jest.fn();
-      (useRouter as jest.Mock).mockReturnValue({
-        replace: mockReplace,
-      });
-
       await renderComponent();
 
       await waitFor(() => {
-        expect(mockReplace).toHaveBeenCalledWith("/");
+        const { replace } = useRouter();
+        expect(replace).toHaveBeenCalledWith("/");
       });
     });
   });

@@ -22,14 +22,11 @@ describe("ログインしていない場合のみアクセスできる", () => {
         }),
       );
 
-      const mockReplace = jest.fn();
-      (useRouter as jest.Mock).mockReturnValue({
-        replace: mockReplace,
-      });
       renderApp(<SignupPage />);
 
       await waitFor(() => {
-        expect(mockReplace).toHaveBeenCalledWith("/");
+        const { replace } = useRouter();
+        expect(replace).toHaveBeenCalledWith("/");
       });
     });
   });
@@ -47,21 +44,36 @@ describe("ログインしていない場合のみアクセスできる", () => {
         }),
       );
 
-      const mockReplace = jest.fn();
-      (useRouter as jest.Mock).mockReturnValue({
-        replace: mockReplace,
-      });
-
       renderApp(<SignupPage />);
 
       await waitFor(() => {
-        expect(mockReplace).not.toHaveBeenCalled();
+        const { replace } = useRouter();
+        expect(replace).not.toHaveBeenCalled();
       });
     });
   });
 });
 
 describe("サインアップAPIでユーザー登録する", () => {
+  const renderComponent = async () => {
+    const rendered = renderApp(<SignupPage />);
+    const { findByLabelText, findByText } = rendered;
+
+    const nameField = await findByLabelText("名前");
+    await userEvent.type(nameField, "大谷 翔平");
+
+    const emailField = await findByLabelText("メールアドレス");
+    await userEvent.type(emailField, "hoge@example.com");
+
+    const passwordField = await findByLabelText("パスワード");
+    await userEvent.type(passwordField, "Password123");
+
+    const loginButton = await findByText("登録");
+    await userEvent.click(loginButton);
+
+    return rendered;
+  };
+
   beforeEach(() => {
     server.use(
       http.get("http://localhost:8000/api/users/me", () => {
@@ -88,27 +100,11 @@ describe("サインアップAPIでユーザー登録する", () => {
         }),
       );
 
-      const mockPush = jest.fn();
-      (useRouter as jest.Mock).mockReturnValue({
-        push: mockPush,
-      });
-
-      const { findByLabelText, findByText } = renderApp(<SignupPage />);
-
-      const nameField = await findByLabelText("名前");
-      await userEvent.type(nameField, "大谷 翔平");
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "Password123");
-
-      const loginButton = await findByText("登録");
-      await userEvent.click(loginButton);
+      await renderComponent();
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith("/login");
+        const { push } = useRouter();
+        expect(push).toHaveBeenCalledWith("/login");
       });
     });
   });
@@ -126,19 +122,7 @@ describe("サインアップAPIでユーザー登録する", () => {
         }),
       );
 
-      const { findByLabelText, findByText } = renderApp(<SignupPage />);
-
-      const nameField = await findByLabelText("名前");
-      await userEvent.type(nameField, "大谷 翔平");
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "Password123");
-
-      const loginButton = await findByText("登録");
-      await userEvent.click(loginButton);
+      const { findByText } = await renderComponent();
 
       expect(await findByText("名前は既に使われています")).toBeInTheDocument();
     });
@@ -157,22 +141,11 @@ describe("サインアップAPIでユーザー登録する", () => {
         }),
       );
 
-      const { findByLabelText, findByText } = renderApp(<SignupPage />);
+      const { findByText } = await renderComponent();
 
-      const nameField = await findByLabelText("名前");
-      await userEvent.type(nameField, "大谷 翔平");
-
-      const emailField = await findByLabelText("メールアドレス");
-      await userEvent.type(emailField, "hoge@example.com");
-
-      const passwordField = await findByLabelText("パスワード");
-      await userEvent.type(passwordField, "Password123");
-
-      const loginButton = await findByText("登録");
-      await userEvent.click(loginButton);
-
-      const message = await findByText("予期しないエラーが発生しました。");
-      expect(message).toBeInTheDocument();
+      expect(
+        await findByText("予期しないエラーが発生しました。"),
+      ).toBeInTheDocument();
     });
   });
 });

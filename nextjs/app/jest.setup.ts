@@ -2,10 +2,24 @@
 import { server } from "@/libs/msw";
 import "@testing-library/jest-dom";
 
+const mockUseRouter = jest.fn();
+
 jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
+  useRouter: mockUseRouter,
 }));
 
 beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
+
+beforeEach(() => {
+  mockUseRouter.mockReturnValue({
+    replace: jest.fn(),
+    push: jest.fn(),
+  });
+});
+
+afterEach(() => {
+  mockUseRouter.mockReset();
+  server.resetHandlers();
+});
+
 afterAll(() => server.close());
