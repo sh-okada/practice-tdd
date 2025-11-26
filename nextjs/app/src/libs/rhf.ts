@@ -41,10 +41,6 @@ export const signupFormValidationRules: SignupFormValidationRules = {
   },
   email: {
     required: "メールアドレスを入力してください",
-    maxLength: {
-      value: 254,
-      message: "メールアドレスは254文字以内で入力してください",
-    },
   },
   password: {
     required: "パスワードを入力してください",
@@ -53,7 +49,7 @@ export const signupFormValidationRules: SignupFormValidationRules = {
       message: "パスワードは8文字以上で入力してください",
     },
     pattern: {
-      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]*$/,
+      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
       message:
         "パスワードには少なくとも大文字・小文字・数字を1つ以上使用してください",
     },

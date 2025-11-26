@@ -1,5 +1,6 @@
 import { Alert, Button, Stack, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { PasswordField } from "@/components/ui/PasswordField";
 import { type SignupFormData, signupFormValidationRules } from "@/libs/rhf";
 
 export type SignupFormStatus =
@@ -58,7 +59,7 @@ export const SignupForm = ({
         control={control}
         name="password"
         render={({ field, fieldState }) => (
-          <TextField
+          <PasswordField
             error={fieldState.invalid}
             helperText={fieldState.error?.message}
             label="パスワード"
