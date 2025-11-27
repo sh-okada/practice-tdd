@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useErrorBoundary } from "react-error-boundary";
 import { signup } from "@/api/auth";
 import { AuthProvider } from "@/components/providers";
-import { SignupForm } from "@/components/ui";
+import { LogoutLayout, SignupForm } from "@/components/ui";
 import { paths } from "@/configs";
 import type { SignupFormData } from "@/libs/rhf";
 import { isConflictError } from "../../libs/axios";
@@ -36,12 +36,14 @@ export default function SignupPage() {
         isAuthed ? (
           router.replace(paths.home.getHref())
         ) : (
-          <SignupForm
-            formStatus={formStatus}
-            onSubmit={async (formData: SignupFormData) => {
-              await mutateAsync(formData);
-            }}
-          />
+          <LogoutLayout>
+            <SignupForm
+              formStatus={formStatus}
+              onSubmit={async (formData: SignupFormData) => {
+                await mutateAsync(formData);
+              }}
+            />
+          </LogoutLayout>
         )
       }
     </AuthProvider>

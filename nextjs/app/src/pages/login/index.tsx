@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useErrorBoundary } from "react-error-boundary";
 import { login } from "@/api/auth";
 import { AuthProvider } from "@/components/providers";
-import { LoginForm } from "@/components/ui";
+import { LoginForm, LogoutLayout } from "@/components/ui";
 import { paths } from "@/configs";
 import { isBadRequestError } from "@/libs/axios";
 import type { LoginFormData } from "@/libs/rhf";
@@ -36,10 +36,12 @@ export default function LoginPage() {
         isAuthed ? (
           router.replace(paths.home.getHref())
         ) : (
-          <LoginForm
-            formStatus={formStatus}
-            onSubmit={async (formData) => await mutateAsync(formData)}
-          />
+          <LogoutLayout>
+            <LoginForm
+              formStatus={formStatus}
+              onSubmit={async (formData) => await mutateAsync(formData)}
+            />
+          </LogoutLayout>
         )
       }
     </AuthProvider>
