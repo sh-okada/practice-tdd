@@ -6,7 +6,7 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "test": "vitest",
+    "test": "vitest --silent passed-only",
     "storybook": "BROWSER=none storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
