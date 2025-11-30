@@ -21,6 +21,11 @@ export const SignupForm = ({
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<SignupFormData>({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
     mode: "onBlur",
   });
 
