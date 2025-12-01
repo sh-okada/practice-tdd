@@ -12,8 +12,8 @@ export default function LoginPage() {
   const router = useRouter();
   const { showBoundary } = useErrorBoundary();
   const { mutateAsync, data: formStatus } = useMutation({
-    mutationFn: (formData: LoginFormData) =>
-      login(formData)
+    mutationFn: async (formData: LoginFormData) =>
+      await login(formData)
         .then(() => {
           router.replace(paths.home.getHref());
           return undefined;

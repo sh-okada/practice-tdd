@@ -12,8 +12,8 @@ export default function SignupPage() {
   const router = useRouter();
   const { showBoundary } = useErrorBoundary();
   const { mutateAsync, data: formStatus } = useMutation({
-    mutationFn: (formData: SignupFormData) =>
-      signup(formData)
+    mutationFn: async (formData: SignupFormData) =>
+      await signup(formData)
         .then(() => {
           router.push(paths.login.getHref());
           return undefined;
