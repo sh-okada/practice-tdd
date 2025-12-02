@@ -3,7 +3,6 @@ import axios, { type AxiosError } from "axios";
 export const axiosClient = axios.create({
   baseURL: "http://localhost:8000/api",
   withCredentials: true,
-  adapter: "fetch",
 });
 
 export const isBadRequestError = (error: unknown): error is AxiosError =>
