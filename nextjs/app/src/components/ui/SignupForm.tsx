@@ -15,7 +15,7 @@ export type SignupFormProps = {
 export const SignupForm = ({
   formStatus = { isError: false },
   onSubmit,
-}: SignupFormProps) => {
+}: Readonly<SignupFormProps>) => {
   const {
     control,
     handleSubmit,

@@ -4,7 +4,7 @@ export type LogoutLayoutProps = {
   children: React.ReactNode;
 };
 
-export const LogoutLayout = ({ children }: LogoutLayoutProps) => {
+export const LogoutLayout = ({ children }: Readonly<LogoutLayoutProps>) => {
   return (
     <BaseLayout>
       {children}

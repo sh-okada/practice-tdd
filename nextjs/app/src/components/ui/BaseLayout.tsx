@@ -6,7 +6,7 @@ export type BaseLayoutProps = {
     | [React.ReactNode, React.ReactNode];
 };
 
-export const BaseLayout = ({ children }: BaseLayoutProps) => {
+export const BaseLayout = ({ children }: Readonly<BaseLayoutProps>) => {
   return (
     <Grid
       container
