@@ -6,5 +6,6 @@ export * from "./Loading";
 export * from "./LoadingFallback";
 export * from "./LoginForm";
 export * from "./LogoutLayout";
+export * from "./Menu";
 export * from "./PasswordField";
 export * from "./SignupForm";

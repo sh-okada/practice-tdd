@@ -1,6 +1,6 @@
 {
   "files": {
-    "includes": ["./stories/**/*.stories.tsx"]
+    "includes": ["**"]
   },
   "formatter": {
     "enabled": true,
