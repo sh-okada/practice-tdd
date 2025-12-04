@@ -1,6 +1,7 @@
 export * from "./BaseLayout";
 export * from "./ErrorFallback";
 export * from "./Footer";
+export * from "./Header";
 export * from "./Loading";
 export * from "./LoadingFallback";
 export * from "./LoginForm";
