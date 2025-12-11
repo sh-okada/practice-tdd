@@ -31,9 +31,9 @@ export const Menu = ({ children }: Readonly<MenuProps>) => {
                 <CloseIcon />
               </IconButton>
             </Box>
-            {children}
           </Container>
         </Toolbar>
+        <Container maxWidth="md">{children}</Container>
       </Dialog>
     </>
   );

@@ -15,7 +15,7 @@ export default function LoginPage() {
     mutationFn: async (formData: LoginFormData) =>
       await login(formData)
         .then(() => {
-          router.replace(paths.home.getHref());
+          router.replace(paths.applicationList.getHref());
           return undefined;
         })
         .catch((error) => {
@@ -34,7 +34,7 @@ export default function LoginPage() {
     <AuthProvider>
       {(isAuthed) =>
         isAuthed ? (
-          router.replace(paths.home.getHref())
+          router.replace(paths.applicationList.getHref())
         ) : (
           <LogoutLayout>
             <LoginForm

@@ -34,7 +34,7 @@ export default function SignupPage() {
     <AuthProvider>
       {(isAuthed) =>
         isAuthed ? (
-          router.replace(paths.home.getHref())
+          router.replace(paths.applicationList.getHref())
         ) : (
           <LogoutLayout>
             <SignupForm
