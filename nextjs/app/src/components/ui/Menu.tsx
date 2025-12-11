@@ -1,22 +1,40 @@
+import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Drawer, IconButton, Typography } from "@mui/material";
+import { Box, Container, Dialog, IconButton, Toolbar } from "@mui/material";
 import React from "react";
 
-export const Menu = () => {
+export type MenuProps = {
+  children?: React.ReactNode;
+};
+
+export const Menu = ({ children }: Readonly<MenuProps>) => {
   const [open, setOpen] = React.useState(false);
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
     <>
-      <IconButton onClick={toggleDrawer(true)}>
+      <IconButton color="inherit" onClick={handleClickOpen}>
         <MenuIcon />
       </IconButton>
-      <Drawer component="nav" onClose={toggleDrawer(false)} open={open}>
-        <Typography>aaa</Typography>
-      </Drawer>
+      <Dialog fullScreen onClose={handleClose} open={open}>
+        <Toolbar>
+          <Container maxWidth="md">
+            <Box textAlign="end">
+              <IconButton color="inherit" onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+            {children}
+          </Container>
+        </Toolbar>
+      </Dialog>
     </>
   );
 };

@@ -1,7 +1,5 @@
-import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react";
-import { Header } from "@/components/ui";
+import { Header, Menu } from "@/components/ui";
 
 const meta = {
   component: Header,
@@ -14,10 +12,6 @@ export const Default: Story = {};
 
 export const WithChildren: Story = {
   args: {
-    children: (
-      <IconButton aria-label="メニュー" color="inherit">
-        <MenuIcon />
-      </IconButton>
-    ),
+    children: <Menu />,
   },
 };
