@@ -20,14 +20,22 @@ export const Menu = ({ children }: Readonly<MenuProps>) => {
 
   return (
     <>
-      <IconButton color="inherit" onClick={handleClickOpen}>
+      <IconButton
+        aria-label="メニューを開く"
+        color="inherit"
+        onClick={handleClickOpen}
+      >
         <MenuIcon />
       </IconButton>
       <Dialog fullScreen onClose={handleClose} open={open}>
         <Toolbar>
           <Container maxWidth="md">
             <Box textAlign="end">
-              <IconButton color="inherit" onClick={handleClose}>
+              <IconButton
+                aria-label="メニューを閉じる"
+                color="inherit"
+                onClick={handleClose}
+              >
                 <CloseIcon />
               </IconButton>
             </Box>
