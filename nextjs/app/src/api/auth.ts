@@ -16,3 +16,5 @@ export type SignupRequest = {
 
 export const signup = async (formData: SignupRequest) =>
   axiosClient.post("/auth/signup", formData);
+
+export const logout = async () => axiosClient.post("/auth/logout");
