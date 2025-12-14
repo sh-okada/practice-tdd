@@ -61,14 +61,6 @@ describe("ログアウトAPIでログアウトする", () => {
   });
 });
 
-/**
- * onClickの多重実行を防止する
- * * onClick実行中の場合
- * * * ログアウトボタンが非活性であること
- * * onClick実行完了の場合
- * * * ログアウトボタンが活性であること
- */
-
 describe("onClickの多重実行を防止する", () => {
   const renderComponent = async () => {
     const { findByText } = renderApp(<LogoutButton />);
