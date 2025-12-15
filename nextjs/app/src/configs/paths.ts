@@ -7,6 +7,10 @@ export const paths = {
     label: "申請",
     getHref: () => "/application",
   },
+  approval: {
+    label: "承認",
+    getHref: () => "/approval",
+  },
   login: {
     getHref: () => "/login",
   },
