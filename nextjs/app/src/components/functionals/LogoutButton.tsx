@@ -1,11 +1,16 @@
-import { Button } from "@mui/material";
+import { Button, type ButtonProps } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useErrorBoundary } from "react-error-boundary";
 import { logout } from "@/api/auth";
 import { paths } from "@/configs";
 
-export const LogoutButton = () => {
+export type LogoutButtonProps = Omit<
+  ButtonProps,
+  "onClick" | "children" | "loading"
+>;
+
+export const LogoutButton = (props: LogoutButtonProps) => {
   const router = useRouter();
   const { showBoundary } = useErrorBoundary();
   const { mutateAsync, isPending } = useMutation({
@@ -24,6 +29,7 @@ export const LogoutButton = () => {
       loading={isPending}
       onClick={async () => await mutateAsync()}
       variant="outlined"
+      {...props}
     >
       ログアウト
     </Button>

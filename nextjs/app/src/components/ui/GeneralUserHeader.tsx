@@ -15,7 +15,7 @@ export const GeneralUserHeader = () => {
             <ListItemText>{paths.application.label}</ListItemText>
           </MenuItem>
         </MenuList>
-        <LogoutButton />
+        <LogoutButton fullWidth />
       </Menu>
     </Header>
   );
